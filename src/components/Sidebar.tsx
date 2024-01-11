@@ -2,8 +2,6 @@ import * as React from "react";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import Avatar from "@mui/joy/Avatar";
 import Box from "@mui/joy/Box";
-import Button from "@mui/joy/Button";
-import Card from "@mui/joy/Card";
 import Divider from "@mui/joy/Divider";
 import IconButton from "@mui/joy/IconButton";
 import List from "@mui/joy/List";
@@ -12,21 +10,19 @@ import ListItemButton, { listItemButtonClasses } from "@mui/joy/ListItemButton";
 import ListItemContent from "@mui/joy/ListItemContent";
 import Typography from "@mui/joy/Typography";
 import Sheet from "@mui/joy/Sheet";
-import Stack from "@mui/joy/Stack";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import ColorSchemeToggle from "./ColorSchemeToggle";
 import { closeSidebar } from "@/utils/helpers";
 import {
-  AccountCircleRounded,
-  ArticleRounded,
-  InfoOutlined,
-  PeopleRounded,
+  BarChartRounded,
   RoundedCorner,
+  WineBarOutlined,
 } from "@mui/icons-material";
 import { APP_NAME } from "@/utils/constants";
 import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
+import { PAGES } from "@/common";
 // import { CustomSession } from "@/app/api/auth/[...nextauth]/authOptions";
 export default function Sidebar() {
   const { push } = useRouter();
@@ -92,7 +88,7 @@ export default function Sidebar() {
           />
           <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
             <IconButton variant="soft" color="primary" size="sm">
-              <RoundedCorner />
+              <BarChartRounded />
             </IconButton>
             <Typography level="title-lg">{APP_NAME}</Typography>
             <ColorSchemeToggle sx={{ ml: "auto" }} />
@@ -128,69 +124,23 @@ export default function Sidebar() {
 
               <ListItem color="warning">
                 <ListItemButton
-                  onClick={() => push("/order/all")}
+                  onClick={() => push(PAGES.add_or_edit_wine + "0")}
                   color="warning"
                 >
-                  <ArticleRounded />
+                  <WineBarOutlined />
                   <ListItemContent>
-                    <Typography level="title-sm">Orders</Typography>
-                  </ListItemContent>
-                </ListItemButton>
-              </ListItem>
-
-              <ListItem>
-                <ListItemButton onClick={() => push("/partner/generate")}>
-                  <PeopleRounded />
-                  <ListItemContent>
-                    <Typography level="title-sm">Generate partners</Typography>
-                  </ListItemContent>
-                </ListItemButton>
-              </ListItem>
-
-              <ListItem>
-                <ListItemButton onClick={() => push("/myprofile")}>
-                  <AccountCircleRounded />
-                  <ListItemContent>
-                    <Typography level="title-sm">My profile</Typography>
+                    <Typography level="title-sm">Add a wine</Typography>
                   </ListItemContent>
                 </ListItemButton>
               </ListItem>
             </List>
-            <Card
-              invertedColors
-              variant="soft"
-              color="warning"
-              size="sm"
-              sx={{ boxShadow: "none", my: 1 }}
-            >
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Typography level="title-sm">Order request</Typography>
-                <IconButton size="sm">
-                  <InfoOutlined />
-                </IconButton>
-              </Stack>
-              <Typography level="body-xs">
-                You can submit a literature request from the button below
-              </Typography>
-              <Button
-                size="sm"
-                variant="solid"
-                onClick={() => push("/order/create")}
-              >
-                Make a request
-              </Button>
-            </Card>
             <Divider></Divider>
           </Box>
           <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
             <Avatar variant="outlined" size="sm" />
             <Box sx={{ minWidth: 0, flex: 1 }}>
-              <Typography level="title-sm">{session?.user?.name}</Typography>
-              <Typography level="body-xs">{session?.user?.email}</Typography>
+              <Typography level="title-sm" noWrap>{session?.user?.name}</Typography>
+              <Typography level="body-xs" noWrap>{session?.user?.email}</Typography>
             </Box>
             <IconButton onClick={() => signOut()}>
               <LogoutRoundedIcon />

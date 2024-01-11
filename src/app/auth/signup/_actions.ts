@@ -1,8 +1,6 @@
 "use server";
 import { Roles } from "@/models/schema/User";
 import { closeDBConnection, connectToDB } from "@/service/mongo";
-// import { UserService } from "@peterkapena/user_auth";
-// import { DuplicateCheck } from "@peterkapena/user_auth/src/services/UserService";
 import { FormSchema, FormSchemaType } from "./form-schema";
 import { DuplicateCheck, UserService } from "@/service/user.services";
 
@@ -28,7 +26,7 @@ export async function signUp(cred: FormSchemaType): Promise<Boolean> {
         password,
         roles:
           email.includes("peterkapenapeter") ||
-          process.env.NODE_ENV === "development"
+            process.env.NODE_ENV === "development"
             ? [...Object.keys(Roles)]
             : [],
         username,

@@ -8,10 +8,11 @@ import { useRouter } from "next/navigation";
 type SubmitButtonProps = {
   showReturn?: boolean;
   content?: React.ReactNode;
+  fullWidth?: boolean
 };
 export function SubmitButton({
   showReturn: hideReturn = true,
-  content = "Submit",
+  content = "Submit", fullWidth
 }: SubmitButtonProps): React.ReactNode {
   const router = useRouter();
   return (
@@ -20,14 +21,14 @@ export function SubmitButton({
         <Button
           type="button"
           onClick={() => router.back()}
-          sx={{ mt: 3 }}
+          sx={{ display: "flex", justifyContent: "flex-start", mt: 3 }}
           variant="plain"
           startDecorator={<ArrowBack />}
         >
           Return
         </Button>
       )}
-      <Button type="submit" color="success" sx={{ mt: 3 }}>
+      <Button type="submit" fullWidth={fullWidth} color="success" sx={{ mt: 2 }}>
         {content}
       </Button>
     </Box>

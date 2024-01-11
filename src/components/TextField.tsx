@@ -24,7 +24,7 @@ export default function ({
   const valueAsNumber = type === "number";
 
   return (
-    <FormControl sx={{ my: 1 }}>
+    <FormControl sx={{ my: .5 }}>
       <FormLabel>{label}</FormLabel>
       <Input
         {...register(fieldName, { valueAsNumber })}
