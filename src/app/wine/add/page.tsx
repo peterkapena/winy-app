@@ -1,5 +1,5 @@
 "use client";
-import { Alert, Box, Checkbox, FormControl, FormLabel, Grid, IconButton, Sheet, Typography } from "@mui/joy";
+import { Alert, Box, Checkbox, FormControl, FormHelperText, FormLabel, Grid, IconButton, Sheet, Typography } from "@mui/joy";
 import React, { useState } from "react";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,13 +13,13 @@ import TextField from "@/components/TextField";
 import SelectField from "@/components/SelectField";
 import AutoCompleteField from "@/components/AutoCompleteField";
 import { PAGES } from "@/common";
+import { InfoOutlined } from "@mui/icons-material";
 
 const wineTypes = ["Red", "White", "Rosé", "White Blend", "Red Blend"]
 const varietal = ["Cabernet Sauvignon", "Merlot", "Shiraz", "Chenin Blanc", "Sauvignon Blanc", "Verdelho", "Chardonnay", "Durif",
   "Pinot Noir", "Zinfandel", "Malbec", "Riesling", "Tempranillo", "Grenache", "Sangiovese", "Viognier", "Moscato"]
 
-
-const Page = () => {
+const Page = ({ params: { id } }: { params: { id: string } }) => {
   const [result, setResult] = useState<ValidationResult>();
   const { data: session } = useSession();
   const [showSubmitButton, setShowSubmitButton] = useState(true);
@@ -28,13 +28,16 @@ const Page = () => {
   const {
     register,
     handleSubmit,
-    control, watch,
+    control, watch, reset,
     formState: { errors },
   } = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
+    defaultValues: {
+      // date_consumed: null
+    }
   });
 
-  const consumed = watch("consumed");
+  const consumed = watch("consumed", true);
 
   const processForm: SubmitHandler<FormSchemaType> = async (data) => {
     console.log(data)
@@ -44,7 +47,7 @@ const Page = () => {
       return;
     }
     setShowSubmitButton(false);
-    // reset();
+    reset();
     setResult(result);
   };
 
@@ -72,7 +75,7 @@ const Page = () => {
               name="type"
               control={control}
               render={({ field }) => (
-                <SelectField fieldError={errors.type} label="Wine type" placeholder="select wine type" fieldName={"type"}
+                <SelectField fieldError={errors.type} label="Wine type" placeholder="select wine type"
                   options={wineTypes.map((wine) => ({ label: wine, value: wine }))} setValue={field.onChange} >
                 </SelectField>
               )}
@@ -84,7 +87,7 @@ const Page = () => {
               name="varietal"
               control={control}
               render={({ field }) => (
-                <AutoCompleteField fieldError={errors.varietal} fieldName="varietal" label="Varietal"
+                <AutoCompleteField fieldError={errors.varietal} label="Varietal"
                   options={varietal.map(v => ({ label: v, value: v }))} placeholder="select varietal" setValue={field.onChange} />
               )}
             />
@@ -92,7 +95,7 @@ const Page = () => {
           <Grid xs={12} sm={12} md={6}>
             <Controller name="rating" control={control} render={() => (
               <TextField placeholder="e.g. 4.5" fieldError={errors.rating}
-                fieldName="rating" label="Your rating" register={register} type="number" />)}
+                fieldName="rating" label="Your rating" register={register} type="number" inputMode="decimal" />)}
             />
           </Grid>
           <Grid xs={12} sm={12} md={6}>
@@ -100,14 +103,18 @@ const Page = () => {
               <Controller name="consumed" control={control} render={({ field }) => (
                 <FormControl sx={{ mr: 3, my: 4 }}>
                   <FormLabel> </FormLabel>
-                  <Checkbox name={"consumed"} checked={field.value} onChange={field.onChange} label="Consumed" size="lg" color="warning" />
-                </FormControl>
+                  <Checkbox defaultChecked={true} name={"consumed"} checked={field.value} onChange={field.onChange} label="Consumed" size="lg" color="warning" />
+                  {errors.consumed?.message && (
+                    <FormHelperText sx={{ color: "red" }}>
+                      <InfoOutlined color="error" />
+                      {errors.consumed.message}
+                    </FormHelperText>
+                  )} </FormControl>
               )}
               />
-              {
-                consumed && <TextField fieldError={errors.date_consumed} type="date" name="date_consumed"
-                  fieldName="date_consumed" label="Date consumed" register={register} ></TextField>
-              }
+              {consumed && <TextField fieldError={errors.date_consumed} type="date" name="date_consumed"
+                fieldName="date_consumed" label="Date consumed" register={register} ></TextField>}
+
             </Box>
           </Grid>
         </Grid>
@@ -134,7 +141,7 @@ const Page = () => {
                     variant="solid"
                     color={"success"}
                     onClick={() => {
-                      push(PAGES.add_or_edit_wine + result._id);
+                      push(PAGES.edit + result._id);
                     }}
                     sx={{ m: 2, mb: 0, px: 1, pb: 0.5 }}
                   >
@@ -144,7 +151,7 @@ const Page = () => {
                     variant="solid"
                     color={"success"}
                     sx={{ m: 2, mb: 0, px: 1, pb: 0.5 }}
-                    onClick={() => setShowSubmitButton(true)}
+                    onClick={() => { reset(); setShowSubmitButton(true); window.location.reload() }}
                   >
                     Add one more
                   </IconButton>

@@ -1,16 +1,16 @@
 import User from "@/models/schema/User";
 import { WineClass, WineModel } from "@/models/schema/Wine";
 
-interface GetWinesReturn {
-    _id: string | undefined,
-    userId: string | undefined,
+export interface GetWineReturn {
+    _id: string,
+    userId: string,
     name: string,
-    year: number | undefined,
-    type: string,
-    varietal: string | undefined,
-    rating: number | undefined,
-    consumed: boolean | undefined,
-    date_consumed: Date | undefined,
+    year: number,
+    type: "Red" | "White" | "Rosé" | "White Blend" | "Red Blend" | undefined,
+    varietal: string,
+    rating: number,
+    consumed: boolean,
+    date_consumed: Date,
 }
 
 export class WineService {
@@ -18,7 +18,7 @@ export class WineService {
         const create_wine = await WineModel.create(wine);
         return create_wine;
     }
-    async getWineByUser(userId: string): Promise<GetWinesReturn[]> {
+    async getWineByUser(userId: string): Promise<GetWineReturn[]> {
         const wines = await WineModel.find({ userId }).sort({ when_created: -1 });
         const rtn = wines.map(wine => ({
             _id: wine?._id.toString(),
@@ -33,5 +33,28 @@ export class WineService {
         })).filter(wine => wine !== undefined);
 
         return rtn;
+    }
+    async getWine(_id: String): Promise<GetWineReturn> {
+        const rtn = await WineModel.findOne({ _id });
+        return rtn;
+    }
+    async edit(input: WineClass, id: string): Promise<Boolean> {
+        // console.log(id);
+        const rtn = await WineModel.updateOne(
+            { _id: id },
+            {
+                name: input.name,
+                year: input.year,
+                type: input.type,
+                varietal: input.varietal,
+                rating: input.rating,
+                consumed: input.consumed,
+                date_consumed: input.date_consumed,
+            }
+        );
+        return rtn.acknowledged;
+    }
+    async delete(id: String): Promise<boolean> {
+        return (await WineModel.deleteOne({ _id: id })).deletedCount > 0;
     }
 }

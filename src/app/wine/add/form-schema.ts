@@ -12,16 +12,11 @@ export const FormSchema = z.object({
   varietal: z
     .string({})
     .min(1, "this is required"),
-  rating: z
-    .number({ invalid_type_error: "invalid rating", required_error: "required", })
-    .min(1, "this is required")
-    .max(5, "This must be less than 10 characters long").optional(),
+  rating: z.union([z.number().multipleOf(.1).positive(), z.nan()]).optional(),
   consumed: z.boolean().optional(),
-  date_consumed: z.coerce.date({ invalid_type_error: "invalid date", required_error: "required" })
-}).refine((data) => data.consumed && data.date_consumed, {
-  message: "required",
-  path: ["date_consumed"],
+  date_consumed: z.coerce.date().optional()
 })
+
 
 export type FormSchemaType = z.infer<typeof FormSchema>;
 

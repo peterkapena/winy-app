@@ -27,10 +27,15 @@ export default function ({
     <FormControl sx={{ my: .5 }}>
       <FormLabel>{label}</FormLabel>
       <Input
-        {...register(fieldName, { valueAsNumber })}
+        {...register(fieldName, { valueAsNumber: type === "number" })}
         error={Boolean(fieldError?.message)}
         {...rest}
         type={type}
+        slotProps={{
+          input: {
+            step: 0.1,
+          },
+        }}
       />
       {fieldError?.message && (
         <FormHelperText sx={{ color: "red" }}>

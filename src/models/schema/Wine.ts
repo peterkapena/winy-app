@@ -28,9 +28,9 @@ export class WineClass {
     @prop()
     varietal?: String;
     @prop()
-    rating!: Number;
+    rating?: Number;
     @prop()
-    consumed!: Boolean;
+    consumed?: Boolean;
     @prop()
     date_consumed?: Date;
     @prop()

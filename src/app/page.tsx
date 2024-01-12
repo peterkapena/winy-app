@@ -1,5 +1,6 @@
 "use client"
 import { PAGES } from '@/common';
+import WineTable from '@/components/WineTable';
 import { InfoRounded, WineBarRounded } from '@mui/icons-material'
 import { Alert, Box, Button, CircularProgress, Typography } from '@mui/joy'
 import { useSession } from 'next-auth/react';
@@ -28,7 +29,7 @@ export default function Home() {
         <Button
           endDecorator={<WineBarRounded />}
           size="md"
-          onClick={() => push(PAGES.add_or_edit_wine + "0")}
+          onClick={() => push(PAGES.add)}
         >
           Add wine
         </Button>
@@ -37,7 +38,7 @@ export default function Home() {
         sx={{
           display: "flex",
           gap: 2,
-          maxWidth: { sm: "50%" },
+          // maxWidth: { sm: "50%" },
           flexDirection: "column",
         }}
       >
@@ -52,7 +53,7 @@ export default function Home() {
             </Typography>
           </div>
         </Alert>
-        
+        <WineTable></WineTable>
       </Box>
     </Box>
   )

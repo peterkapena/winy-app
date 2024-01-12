@@ -7,12 +7,12 @@ interface AutoCompleteFieldProps {
     options: { label: string, value: any }[],
     placeholder: string,
     setValue: any,
-    fieldName: string;
     fieldError: FieldError | undefined,
     label: string,
+    defaultValue?: any
 }
 
-function AutoCompleteField({ options, placeholder, setValue, fieldName, fieldError, label }: AutoCompleteFieldProps) {
+function AutoCompleteField({ options, placeholder, setValue, defaultValue, fieldError, label }: AutoCompleteFieldProps) {
     return (
         <FormControl sx={{ my: 1 }}>
             <FormLabel id="select-field-demo-label" htmlFor="select-field-demo-button">
@@ -27,6 +27,7 @@ function AutoCompleteField({ options, placeholder, setValue, fieldName, fieldErr
                 placeholder={placeholder}
                 isOptionEqualToValue={(option, value) => option.value === value.value}
                 options={options}
+                defaultValue={defaultValue}
             />
             {
                 fieldError?.message && (

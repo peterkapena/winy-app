@@ -124,7 +124,7 @@ export default function Sidebar() {
 
               <ListItem color="warning">
                 <ListItemButton
-                  onClick={() => push(PAGES.add_or_edit_wine + "0")}
+                  onClick={() => push(PAGES.add)}
                   color="warning"
                 >
                   <WineBarOutlined />
