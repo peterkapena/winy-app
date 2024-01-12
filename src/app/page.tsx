@@ -48,8 +48,7 @@ export default function Home() {
         >
           <div>
             <Typography level="body-sm">
-              Here is a list of your favourite wines.
-              To add a new one to the list use the button at the rigth. Or click on one in the list to edit it.
+              To add a new one to the list use the button at the rigth. Or click on one in the list to edit it. The wine list will appear below.
             </Typography>
           </div>
         </Alert>

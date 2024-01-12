@@ -10,7 +10,7 @@ export interface GetWineReturn {
     varietal: string,
     rating: number,
     consumed: boolean,
-    date_consumed: Date,
+    date_consumed?: Date,
 }
 
 export class WineService {

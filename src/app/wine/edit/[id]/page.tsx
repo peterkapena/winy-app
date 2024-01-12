@@ -1,19 +1,17 @@
 "use client";
-import { Alert, Box, Checkbox, FormControl, FormLabel, Grid, IconButton, Sheet, Typography } from "@mui/joy";
+import { Box, Checkbox, FormControl, FormLabel, Grid, Sheet, Typography } from "@mui/joy";
 import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { useRouter } from "next/navigation";
 import { SubmitButton } from "@/components/SubmitButton";
 import TextField from "@/components/TextField";
 import SelectField from "@/components/SelectField";
 import AutoCompleteField from "@/components/AutoCompleteField";
-import { IS_DEVELOPER, PAGES } from "@/common";
+import { IS_DEVELOPER } from "@/common";
 import { GetWineReturn } from "@/service/wine.service";
-import { addWine, edit, getWine } from "../../add/_actions";
-import { ValidationResult, FormSchemaType, FormSchema } from "../../add/form-schema";
+import { edit, getWine } from "../../add/_actions";
+import { FormSchemaType, FormSchema } from "../../add/form-schema";
 import { Notice } from "@/components/Notice";
 
 const wineTypes = ["Red", "White", "Rosé", "White Blend", "Red Blend"]
@@ -25,7 +23,6 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
   const [result, setResult] = useState<Boolean>();
   const { data: session } = useSession();
   const [showSubmitButton, setShowSubmitButton] = useState(true);
-  const { push } = useRouter();
   const [wine, setWine] = useState<GetWineReturn>()
 
   useEffect(() => {
@@ -120,7 +117,13 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
               />
               {
                 consumed && <TextField fieldError={errors.date_consumed} type="date" name="date_consumed"
-                  fieldName="date_consumed" label="Date consumed" defaultValue={new Date(wine.date_consumed).toISOString().split('T')[0]}
+                  fieldName="date_consumed" label="Date consumed"
+                  defaultValue={
+                    wine.date_consumed
+                      ? new Date(wine.date_consumed).toISOString().split('T')[0]
+                      : ''
+                  }
+
                   register={register} ></TextField>
               }
             </Box>

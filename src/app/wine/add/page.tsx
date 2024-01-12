@@ -37,7 +37,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     }
   });
 
-  const consumed = watch("consumed", true);
+  const consumed = watch("consumed");
 
   const processForm: SubmitHandler<FormSchemaType> = async (data) => {
     console.log(data)
@@ -103,7 +103,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
               <Controller name="consumed" control={control} render={({ field }) => (
                 <FormControl sx={{ mr: 3, my: 4 }}>
                   <FormLabel> </FormLabel>
-                  <Checkbox defaultChecked={true} name={"consumed"} checked={field.value} onChange={field.onChange} label="Consumed" size="lg" color="warning" />
+                  <Checkbox defaultChecked={field.value} name={"consumed"} checked={field.value} onChange={field.onChange} label="Consumed" size="lg" color="warning" />
                   {errors.consumed?.message && (
                     <FormHelperText sx={{ color: "red" }}>
                       <InfoOutlined color="error" />
