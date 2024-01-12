@@ -1,29 +1,25 @@
 "use client";
-import { Alert, Box, Card, Checkbox, FormControl, FormHelperText, FormLabel, Grid, IconButton, Input, Select, Sheet, Typography } from "@mui/joy";
+import { Alert, Box, Checkbox, FormControl, FormLabel, Grid, IconButton, Sheet, Typography } from "@mui/joy";
 import React, { useState } from "react";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormSchema, FormSchemaType, ValidationResult } from "./form-schema";
-import { createOrder as addWine } from "./_actions";
-// import TextField from "@/components/TextField";
-import TextArea from "@/components/TextArea";
+import { addWine } from "./_actions";
 import { useSession } from "next-auth/react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useRouter } from "next/navigation";
 import { SubmitButton } from "@/components/SubmitButton";
-import { InfoOutlined } from "@mui/icons-material";
-import { type } from "os";
 import TextField from "@/components/TextField";
 import SelectField from "@/components/SelectField";
 import AutoCompleteField from "@/components/AutoCompleteField";
-import FormGroup from '@mui/material/FormGroup';
+import { PAGES } from "@/common";
 
 const wineTypes = ["Red", "White", "Rosé", "White Blend", "Red Blend"]
 const varietal = ["Cabernet Sauvignon", "Merlot", "Shiraz", "Chenin Blanc", "Sauvignon Blanc", "Verdelho", "Chardonnay", "Durif",
   "Pinot Noir", "Zinfandel", "Malbec", "Riesling", "Tempranillo", "Grenache", "Sangiovese", "Viognier", "Moscato"]
 
 
-const Page = ({ params }: { params: { id: string } }) => {
+const Page = () => {
   const [result, setResult] = useState<ValidationResult>();
   const { data: session } = useSession();
   const [showSubmitButton, setShowSubmitButton] = useState(true);
@@ -32,7 +28,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const {
     register,
     handleSubmit,
-    reset, control, setValue, watch,
+    control, watch,
     formState: { errors },
   } = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
@@ -40,7 +36,6 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const consumed = watch("consumed");
 
-  // console.log((session as any)?.user.id)
   const processForm: SubmitHandler<FormSchemaType> = async (data) => {
     console.log(data)
     const result = await addWine(data, (session as any)?.user.id);
@@ -116,7 +111,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             </Box>
           </Grid>
         </Grid>
-        {showSubmitButton && <SubmitButton fullWidth></SubmitButton>}
+        {showSubmitButton && <SubmitButton></SubmitButton>}
         {!showSubmitButton && result?.success && (
           <Box
             sx={{
@@ -139,7 +134,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                     variant="solid"
                     color={"success"}
                     onClick={() => {
-                      push("/order/edit/" + result._id);
+                      push(PAGES.add_or_edit_wine + result._id);
                     }}
                     sx={{ m: 2, mb: 0, px: 1, pb: 0.5 }}
                   >
@@ -151,7 +146,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                     sx={{ m: 2, mb: 0, px: 1, pb: 0.5 }}
                     onClick={() => setShowSubmitButton(true)}
                   >
-                    Submit another
+                    Add one more
                   </IconButton>
                 </Box>
               }
@@ -159,7 +154,7 @@ const Page = ({ params }: { params: { id: string } }) => {
               <div>
                 <div>{"Success"}</div>
                 <Typography level="body-sm" color={"success"}>
-                  Order has been submitted.
+                  Wine has been added.
                 </Typography>
               </div>
             </Alert>

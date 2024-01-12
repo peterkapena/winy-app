@@ -52,6 +52,7 @@ export default function Home() {
             </Typography>
           </div>
         </Alert>
+        
       </Box>
     </Box>
   )

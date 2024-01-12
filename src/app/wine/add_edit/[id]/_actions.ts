@@ -1,23 +1,21 @@
 "use server";
+import { WineService } from "@/service/wine.service";
 import { FormSchemaType, FormSchema, ValidationResult } from "./form-schema";
 import { User, UserModel } from "@/models/schema/User";
 
-export async function createOrder(
+export async function addWine(
   data: FormSchemaType,
   userId: string
 ): Promise<ValidationResult> {
   const result = FormSchema.safeParse(data);
-  console.log(userId)
+  // console.log(userId)
   if (result.success) {
     try {
-      // const order = await (
-      //   await OrderService._()
-      // ).createOrder({
-      //   ...result.data,
-      //   userId,
-      // });
+      const wine = await new WineService().addWine({
+        ...data, userId, rating: data.rating || 0, consumed: data.consumed || false
+      })
 
-      return { success: true, data, _id: "order._id?.toString()" };
+      return { success: true, data, _id: wine._id?.toString() };
     } catch (error) {
       return { success: true, data };
     }
@@ -26,20 +24,14 @@ export async function createOrder(
   return { success: false, data };
 }
 
-// export async function getOrders(userId?: string) {
-//   // if (userId) {
-//   //   const user = (await UserModel.findById(userId)) as User;
-//   //   if (user && user.roles?.includes("admin")) {
-//   //     const rtn = await (await OrderService._()).getOrders();
-//   //     return JSON.stringify(rtn);
-//   //   } else if (user._id) {
-//   //     const rtn = await (await OrderService._()).getOrdersByUser(userId);
-//   //     return JSON.stringify(rtn);
-//   //   }
-//   // }
+export async function getWines(userId?: string) {
+  if (userId) {
+    const rtn = await new WineService().getWineByUser(userId)
+    return JSON.stringify(rtn);
+  }
 
-//   throw new Error("Invalid user id");
-// }
+  throw new Error("Invalid user id");
+}
 
 // export async function getOrder(id: string) {
 //   const rtn = await (await OrderService._()).getOrder(id);
